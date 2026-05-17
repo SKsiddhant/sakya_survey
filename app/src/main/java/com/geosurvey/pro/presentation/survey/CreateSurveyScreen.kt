@@ -244,11 +244,20 @@ fun CreateSurveyScreen(
                             }
                             
                             // Map Key Overlay Warning
-                            if (state.currentSurvey.latitude == 0.0) {
+                            if (state.currentSurvey.latitude == 0.0 && searchQuery.isEmpty()) {
                                 Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)), contentAlignment = Alignment.Center) {
-                                    Text("Map loading... Ensure API Key is set.", color = Color.White, style = MaterialTheme.typography.bodySmall)
+                                    Text("Search a city above to load the map.", color = Color.White, style = MaterialTheme.typography.bodySmall)
                                 }
                             }
+                        }
+                        
+                        if (state.error != null) {
+                            Text(
+                                text = "Error: ${state.error}",
+                                color = SakyaRed,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
                         }
                         
                         Spacer(modifier = Modifier.height(16.dp))

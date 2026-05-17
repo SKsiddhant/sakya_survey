@@ -42,17 +42,22 @@ fun DashboardScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     var isMapView by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
-            if (effect is DashboardEffect.NavigateToSurvey) {
-                onNavigateToSurvey(effect.surveyId)
+            when (effect) {
+                is DashboardEffect.NavigateToSurvey -> onNavigateToSurvey(effect.surveyId)
+                is DashboardEffect.ShowError -> {
+                    snackbarHostState.showSnackbar(effect.message)
+                }
             }
         }
     }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             GotedBottomBar(
                 onHistoryClick = onNavigateToHistory,

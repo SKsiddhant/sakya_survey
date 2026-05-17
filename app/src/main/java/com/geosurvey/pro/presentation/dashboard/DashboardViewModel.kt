@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import kotlinx.coroutines.flow.onStart
+
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val firestoreRepository: FirestoreRepository,
@@ -30,27 +32,34 @@ class DashboardViewModel @Inject constructor(
             setState { copy(isLoading = true) }
             val user = authRepository.currentUser.first()
             
+            // We use onStart to emit a null location immediately so the combine doesn't hang
+            // waiting for a GPS fix. This ensures surveys show up even if GPS is slow.
+            val locationFlow = locationRepository.getLocationUpdates()
+                .onStart { emit(com.geosurvey.pro.domain.model.LocationData(0.0, 0.0)) }
+
             combine(
                 firestoreRepository.getSurveys(),
-                locationRepository.getLocationUpdates(),
+                locationFlow,
                 if (user != null) firestoreRepository.getUserResponses(user.id) else kotlinx.coroutines.flow.flowOf(emptyList())
             ) { surveys, location, userResponses ->
-                val nearby = surveys.filter { survey ->
-                    survey.isActive && isWithinRadius(location.latitude, location.longitude, survey)
-                }
+                // Show all active surveys
+                val activeSurveys = surveys.filter { it.isActive }
                 
                 val flagged = userResponses.filter { it.status == ResponseStatus.REJECTED }
                     .mapNotNull { response -> 
                         surveys.find { it.id == response.surveyId }?.let { it to response }
                     }
                 
-                Triple(nearby, location, flagged)
-            }.collect { (nearby, location, flagged) ->
+                Triple(activeSurveys, location, flagged)
+            }.collect { (activeSurveys, location, flagged) ->
+                // Since we need to fetch user responses separately for state (or use the one from combine)
+                // Let's just use the ones from the combine directly to be faster.
                 val userResponses = user?.let { firestoreRepository.getUserResponses(it.id).first() } ?: emptyList()
+                
                 setState { 
                     copy(
-                        nearbySurveys = nearby,
-                        userLocation = location,
+                        nearbySurveys = activeSurveys,
+                        userLocation = if (location.latitude == 0.0) null else location,
                         flaggedSurveys = flagged,
                         userResponses = userResponses,
                         isLoading = false,
@@ -71,7 +80,15 @@ class DashboardViewModel @Inject constructor(
         when (event) {
             DashboardEvent.Refresh -> observeSurveysAndLocation()
             is DashboardEvent.SurveyClicked -> {
-                sendEffect(DashboardEffect.NavigateToSurvey(event.survey.id))
+                val survey = event.survey
+                val userLoc = uiState.value.userLocation
+                
+                if (userLoc != null && !isWithinRadius(userLoc.latitude, userLoc.longitude, survey)) {
+                    val distance = locationRepository.calculateDistance(userLoc.latitude, userLoc.longitude, survey.latitude, survey.longitude)
+                    sendEffect(DashboardEffect.ShowError("You are ${distance.toInt()}m away. Please get within ${survey.radius.toInt()}m to start."))
+                } else {
+                    sendEffect(DashboardEffect.NavigateToSurvey(survey.id))
+                }
             }
         }
     }

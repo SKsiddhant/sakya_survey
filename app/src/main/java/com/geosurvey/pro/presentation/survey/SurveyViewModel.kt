@@ -118,16 +118,25 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isLoading = true) }
             val user = authRepository.currentUser.first()
-            val survey = uiState.value.currentSurvey.copy(
-                id = uiState.value.currentSurvey.id.ifEmpty { java.util.UUID.randomUUID().toString() },
-                creatorId = user?.id ?: ""
+            
+            // Ensure locationName is trimmed and valid
+            val current = uiState.value.currentSurvey
+            val locationName = current.locationName.ifEmpty { "Unknown City" }
+
+            val survey = current.copy(
+                id = current.id.ifEmpty { java.util.UUID.randomUUID().toString() },
+                creatorId = user?.id ?: "",
+                locationName = locationName,
+                isActive = true // Ensure new surveys are active by default
             )
+            
             val isNew = uiState.value.currentSurvey.id.isEmpty()
             val result = if (isNew) {
                 firestoreRepository.createSurvey(survey)
             } else {
                 firestoreRepository.updateSurvey(survey)
             }
+
             result.onSuccess {
                 if (isNew) {
                     firestoreRepository.broadcastNotification(
