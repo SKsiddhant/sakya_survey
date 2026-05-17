@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer Brand Circle (Sakya Red) -->
+    <path
+        android:fillColor="#D8434E"
+        android:pathData="M54,24c-16.5,0-30,13.5-30,30s13.5,30,30,30s30-13.5,30-30S70.5,24,54,24z M54,74c-11,0-20-9-20-20s9-20,20-20s20,9,20,20S65,74,54,74z" />
+
+    <!-- Inner Professional Mark (Sakya Teal) -->
+    <path
+        android:fillColor="#17A2B8"
+        android:pathData="M54,40c-7.7,0-14,6.3-14,14s6.3,14,14,14s14-6.3,14-14S61.7,40,54,40z M54,60c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S57.3,60,54,60z" />
+
+    <!-- Decorative Accents -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,53h12v2h-12z" />
+
+</vector>
