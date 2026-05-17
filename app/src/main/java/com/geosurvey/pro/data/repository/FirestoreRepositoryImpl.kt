@@ -24,12 +24,12 @@ class FirestoreRepositoryImpl @Inject constructor(
     override fun getSurveys(): Flow<List<Survey>> = callbackFlow {
         val subscription = surveysCollection.addSnapshotListener { snapshot, error ->
             if (error != null) {
-                Log.e(TAG, "Listen failed: ${error.message}", error)
+                trySend(emptyList())
                 return@addSnapshotListener
             }
             snapshot?.let {
                 trySend(it.toObjects(Survey::class.java))
-            }
+            } ?: trySend(emptyList())
         }
         awaitClose { subscription.remove() }
     }
@@ -156,8 +156,12 @@ class FirestoreRepositoryImpl @Inject constructor(
     }
 
     override fun getAllAdminResponses(adminId: String): Flow<List<SurveyResponse>> = callbackFlow {
-        val subscription = responsesCollection.addSnapshotListener { snapshot, _ ->
-            snapshot?.let { trySend(it.toObjects(SurveyResponse::class.java)) }
+        val subscription = responsesCollection.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                trySend(emptyList())
+                return@addSnapshotListener
+            }
+            snapshot?.let { trySend(it.toObjects(SurveyResponse::class.java)) } ?: trySend(emptyList())
         }
         awaitClose { subscription.remove() }
     }

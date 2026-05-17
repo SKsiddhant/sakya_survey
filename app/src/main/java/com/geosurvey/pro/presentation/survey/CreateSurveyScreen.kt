@@ -210,9 +210,7 @@ fun CreateSurveyScreen(
                             
                             IconButton(
                                 onClick = {
-                                    // Trigger location fetch via VM
-                                    // For now, Map has isMyLocationEnabled=true which provides a system button
-                                    // but we can also manually center.
+                                    viewModel.onEvent(SurveyEvent.UseCurrentLocation)
                                 },
                                 modifier = Modifier.padding(top = 24.dp).background(SakyaRed.copy(alpha = 0.1f), CircleShape)
                             ) {

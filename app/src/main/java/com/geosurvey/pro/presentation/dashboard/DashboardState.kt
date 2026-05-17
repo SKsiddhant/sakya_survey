@@ -7,6 +7,7 @@ import com.geosurvey.pro.domain.model.SurveyResponse
 data class DashboardState(
     val nearbySurveys: List<Survey> = emptyList(),
     val flaggedSurveys: List<Pair<Survey, SurveyResponse>> = emptyList(),
+    val userResponses: List<SurveyResponse> = emptyList(),
     val userLocation: LocationData? = null,
     val userName: String = "Field Agent",
     val isLoading: Boolean = false,

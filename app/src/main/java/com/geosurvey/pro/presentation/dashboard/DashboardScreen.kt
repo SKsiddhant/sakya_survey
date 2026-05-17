@@ -27,6 +27,7 @@ import com.geosurvey.pro.domain.model.SurveyResponse
 import com.geosurvey.pro.presentation.components.SurveyCardShimmer
 import com.geosurvey.pro.presentation.theme.SakyaRed
 import com.geosurvey.pro.presentation.theme.SakyaTeal
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
@@ -215,6 +216,14 @@ fun GotedMapView(state: DashboardState, onSurveyClick: (Survey) -> Unit) {
     val userLocation = state.userLocation?.let { LatLng(it.latitude, it.longitude) } ?: LatLng(0.0, 0.0)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(userLocation, 12f)
+    }
+
+    LaunchedEffect(state.userLocation) {
+        state.userLocation?.let {
+            cameraPositionState.animate(
+                CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15f)
+            )
+        }
     }
 
     GoogleMap(

@@ -122,16 +122,25 @@ fun NavGraph() {
         }
 
         composable(Screen.History.route) {
-            HistoryScreen(onNavigateBack = { navController.popBackStack() })
+            val dashboardViewModel: DashboardViewModel = hiltViewModel()
+            HistoryScreen(
+                viewModel = dashboardViewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         composable(Screen.Profile.route) {
-            ProfileScreen(onLogout = {
-                authViewModel.onEvent(com.geosurvey.pro.presentation.auth.AuthEvent.Logout)
-                navController.navigate(Screen.Login.route) {
-                    popUpTo(0) { inclusive = true }
-                }
-            })
+            val dashboardViewModel: DashboardViewModel = hiltViewModel()
+            ProfileScreen(
+                viewModel = dashboardViewModel,
+                onLogout = {
+                    authViewModel.onEvent(com.geosurvey.pro.presentation.auth.AuthEvent.Logout)
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
         
         composable(Screen.AdminDashboard.route) {

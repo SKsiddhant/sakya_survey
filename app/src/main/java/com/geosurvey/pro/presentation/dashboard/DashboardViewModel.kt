@@ -46,11 +46,13 @@ class DashboardViewModel @Inject constructor(
                 
                 Triple(nearby, location, flagged)
             }.collect { (nearby, location, flagged) ->
+                val userResponses = user?.let { firestoreRepository.getUserResponses(it.id).first() } ?: emptyList()
                 setState { 
                     copy(
                         nearbySurveys = nearby,
                         userLocation = location,
                         flaggedSurveys = flagged,
+                        userResponses = userResponses,
                         isLoading = false,
                         isRefreshing = false,
                         userName = user?.displayName ?: "Field Agent"
