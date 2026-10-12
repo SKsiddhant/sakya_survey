@@ -48,12 +48,8 @@ class AuthRepositoryImpl @Inject constructor(
                 )
             } catch (e: Exception) {
                 Timber.w(e, "Firestore fetch failed (possibly offline)")
-                // Fallback for demo accounts or default to user
-                val fallbackRole = if (email.equals("admin@geosurvey.com", ignoreCase = true)) {
-                    UserRole.ADMIN.value
-                } else {
-                    UserRole.USER.value
-                }
+                // Never infer admin from an email address: the role must come from Firestore.
+                val fallbackRole = UserRole.USER.value
                 User(
                     id = firebaseUser.uid,
                     email = firebaseUser.email ?: "",

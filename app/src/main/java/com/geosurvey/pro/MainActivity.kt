@@ -35,9 +35,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Seed demo accounts and start notification listener
+        // Start notification listener (and, in debug builds only, seed demo accounts)
         lifecycleScope.launch {
-            demoSeeder.createDemoAccounts()
+            // The demo accounts have well-known passwords. Seeding them in release builds would
+            // hand anyone who reads the source a login on the production Firebase project.
+            if (BuildConfig.DEBUG) demoSeeder.createDemoAccounts()
             
             // Notification Observer
             val startTime = System.currentTimeMillis()
