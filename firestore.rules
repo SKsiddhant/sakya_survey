@@ -17,7 +17,15 @@ service cloud.firestore {
     // User profiles
     match /users/{userId} {
       allow read: if isAuthenticated();
-      allow write: if request.auth.uid == userId;
+
+      // Users manage their own profile but can never grant themselves a role. isAdmin() trusts
+      // this document's `role` field, so letting users write it meant anyone could become admin.
+      // Make admins from the Firebase console (or the Admin SDK), which bypass these rules.
+      allow create: if request.auth.uid == userId
+                    && request.resource.data.get('role', 'user') == 'user';
+      allow update: if request.auth.uid == userId
+                    && request.resource.data.get('role', 'user') == resource.data.get('role', 'user');
+      allow delete: if false;
     }
 
     // Surveys
@@ -30,10 +38,19 @@ service cloud.firestore {
       allow update, delete: if isAdmin() && resource.data.creatorId == request.auth.uid;
     }
 
+    // Broadcast notifications: admins send, signed-in users listen.
+    // (The app reads and writes this collection but it had no rule, so both were denied.)
+    match /broadcasts/{broadcastId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+
     // Responses
     match /responses/{responseId} {
-      // Admins can read responses to their surveys
-      allow read: if isAdmin();
+      // Admins can read responses; respondents can read their own (History screen).
+      allow read: if isAdmin()
+                  || (isAuthenticated() && resource.data.respondentId == request.auth.uid);
 
       // Users can only create responses, cannot update or delete
       // Logic to ensure they don't spoof respondentId

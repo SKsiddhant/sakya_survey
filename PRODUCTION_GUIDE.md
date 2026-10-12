@@ -32,3 +32,16 @@
 ## 6. CI/CD Suggestions
 - **GitHub Actions**: Automate builds and run tests on every pull request.
 - **Firebase App Distribution**: Automatically push new builds to internal testers.
+
+## Secrets and demo accounts
+
+- Put `MAPS_API_KEY` in `secrets.properties` (git-ignored). Copy `secrets.properties.example` to start.
+  `local.defaults.properties` holds a placeholder so builds still succeed without it.
+- Restrict the Maps key in Google Cloud Console to this app's package name and SHA-1 fingerprint, and
+  restrict the Firebase key in `google-services.json` the same way.
+- Demo accounts (`DemoAccounts.kt`) are only created in **debug** builds. They have well-known passwords:
+  delete them from Firebase Authentication on any project that real users share.
+- Admins are created from the Firebase console by setting `role: "admin"` on `users/{uid}`. The security
+  rules deliberately stop users from setting their own role, so the debug demo seeder can no longer
+  promote itself; set the demo admin's role by hand (or use the emulator).
+- Deploy rule changes with `firebase deploy --only firestore:rules`.

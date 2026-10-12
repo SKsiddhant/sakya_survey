@@ -9,8 +9,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
 }
 
-// IMPORTANT: Set MAPS_API_KEY in your local.properties or secrets.properties file!
-// e.g. MAPS_API_KEY=AIzaSy...
+// IMPORTANT: put your MAPS_API_KEY in secrets.properties (git-ignored; see secrets.properties.example).
 android {
     namespace = "com.geosurvey.pro"
     compileSdk = 35
@@ -50,7 +49,7 @@ android {
 
 secrets {
     propertiesFileName = "secrets.properties"
-    defaultPropertiesFileName = "local.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
 
 dependencies {

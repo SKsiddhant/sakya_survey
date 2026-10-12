@@ -4,3 +4,15 @@
 /app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
 /app/build/intermediates/javac/debugAndroidTest/compileDebugAndroidTestJavaWithJavac/classes/
 /build/
+
+# Local configuration and secrets: never commit these
+local.properties
+secrets.properties
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+/captures
+.externalNativeBuild
+.cxx
