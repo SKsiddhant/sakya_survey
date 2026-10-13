@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "313895440382",
-    "project_id": "geosurveypro-d80d5",
-    "storage_bucket": "geosurveypro-d80d5.firebasestorage.app"
+    "project_number": "YOUR_PROJECT_NUMBER",
+    "project_id": "your-project-id",
+    "storage_bucket": "your-project-id.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313895440382:android:d47ad491471850c4827aaf",
+        "mobilesdk_app_id": "1:YOUR_PROJECT_NUMBER:android:YOUR_APP_ID",
         "android_client_info": {
           "package_name": "com.geosurvey.pro"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAvJ0KLgSSTVCMLQ9dmEcesdBZZ6_-zCqU"
+          "current_key": "YOUR_FIREBASE_API_KEY"
         }
       ],
       "services": {

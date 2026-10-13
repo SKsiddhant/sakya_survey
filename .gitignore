@@ -16,3 +16,6 @@ secrets.properties
 /captures
 .externalNativeBuild
 .cxx
+
+# Firebase config: download your own from the Firebase console (see google-services.json.example)
+app/google-services.json

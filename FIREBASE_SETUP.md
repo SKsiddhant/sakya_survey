@@ -10,7 +10,7 @@ Follow these steps to complete the Firebase integration:
 ## 2. Android App Configuration
 - Register your Android app with package name `com.geosurvey.pro`.
 - Download the `google-services.json` file.
-- Place `google-services.json` in the `app/` directory of your project.
+- Place `google-services.json` in the `app/` directory of your project (it is git-ignored; `app/google-services.json.example` shows the expected shape).
 
 ## 3. Enable Firebase Services
 In the Firebase Console, enable the following:
