@@ -19,3 +19,8 @@ secrets.properties
 
 # Firebase config: download your own from the Firebase console (see google-services.json.example)
 app/google-services.json
+
+# Release signing material: never commit
+*.jks
+*.keystore
+keystore.properties
