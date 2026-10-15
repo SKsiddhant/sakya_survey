@@ -1,165 +1,27 @@
-# 📝 Sakya Survey
+# Sakya Survey (GeoSurvey Pro)
 
-A modern survey application that allows users to create, manage, and participate in surveys with an intuitive and responsive interface.
+An Android app for creating and taking location-aware surveys, with QR scanning, geofencing, offline storage and an analytics view.
 
----
+## Tech stack
 
-## 🚀 Features
+- Kotlin, Jetpack Compose, Navigation Compose
+- Hilt for dependency injection, Room for local storage
+- Firebase (Auth, Firestore, Storage, Cloud Messaging, Crashlytics)
+- Google Maps (Maps Compose) and geofencing
+- Min SDK 24, target/compile SDK 35 (application id `com.geosurvey.pro`)
 
-- 📋 Create custom surveys
-- 🖊️ Add multiple question types
-- 📊 View survey responses
-- 🔒 Secure authentication
-- 📱 Responsive design
-- ⚡ Fast and user-friendly interface
+## Setup
 
----
+1. Clone the repo and open it in a recent Android Studio.
+2. Create a Firebase project and register the app (`com.geosurvey.pro`). Download `google-services.json` into `app/`. It is git-ignored; `app/google-services.json.example` shows the shape. See [FIREBASE_SETUP.md](FIREBASE_SETUP.md).
+3. Copy `secrets.properties.example` to `secrets.properties` (git-ignored) and set `MAPS_API_KEY` to your own Google Maps key, restricted to the package name and SHA-1.
+4. Deploy `firestore.rules` to your Firestore project.
+5. Build and run: `./gradlew assembleDebug`. Unit tests: `./gradlew testDebugUnitTest`.
 
-## 🛠️ Tech Stack
+Never commit `google-services.json`, `secrets.properties`, `local.properties` or signing keystores.
 
-**Frontend**
-- HTML
-- CSS
-- JavaScript
-- (Add React/Vue/Angular if used)
+## More
 
-**Backend**
-- Node.js
-- Express.js
-- (Or Django/Flask if applicable)
+- [PRODUCTION_GUIDE.md](PRODUCTION_GUIDE.md) covers release preparation.
 
-**Database**
-- MongoDB
-- (Or MySQL/PostgreSQL if applicable)
-
----
-
-## 📂 Project Structure
-
-```
-sakya_survey/
-│── client/          # Frontend
-│── server/          # Backend
-│── database/        # Database files
-│── routes/          # API routes
-│── models/          # Database models
-│── controllers/     # Business logic
-│── public/          # Static assets
-│── package.json
-│── README.md
-```
-
----
-
-## ⚙️ Installation
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/SKsiddhant/sakya_survey.git
-```
-
-### 2. Navigate into the project
-
-```bash
-cd sakya_survey
-```
-
-### 3. Install dependencies
-
-```bash
-npm install
-```
-
-### 4. Configure Environment Variables
-
-Create a `.env` file in the root directory and add:
-
-```env
-PORT=5000
-DATABASE_URL=your_database_url
-JWT_SECRET=your_secret_key
-```
-
-### 5. Start the application
-
-```bash
-npm start
-```
-
-or
-
-```bash
-npm run dev
-```
-
----
-
-## 📸 Screenshots
-
-Add screenshots of your application here.
-
-Example:
-
-```
-screenshots/
-├── home.png
-├── login.png
-├── dashboard.png
-└── survey.png
-```
-
----
-
-## 🌟 Future Improvements
-
-- Email invitations
-- Survey analytics dashboard
-- Export responses to CSV/Excel
-- Dark mode
-- Real-time response tracking
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-
-1. Fork the repository
-2. Create a feature branch
-
-```bash
-git checkout -b feature-name
-```
-
-3. Commit your changes
-
-```bash
-git commit -m "Add new feature"
-```
-
-4. Push to GitHub
-
-```bash
-git push origin feature-name
-```
-
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-## 👨‍💻 Author
-
-**Siddhant Kothiya**
-
-- GitHub: https://github.com/SKsiddhant
-
----
-
-⭐ If you like this project, don't forget to **Star** the repository!
+Not built or run in the review environment; the steps above were checked against the project files only.
