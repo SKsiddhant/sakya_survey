@@ -18,7 +18,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     lateinit var notificationHelper: NotificationHelper
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val event = GeofencingEvent.fromIntent(intent!!) ?: return
+        val event = GeofencingEvent.fromIntent(intent ?: return) ?: return
         if (event.hasError()) {
             Log.e("GeofenceReceiver", "Geofence event error: ${event.errorCode}")
             return

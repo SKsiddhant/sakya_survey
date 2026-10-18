@@ -31,6 +31,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <!-- Target of the geofence PendingIntent; without this declaration the broadcast is never delivered. -->
+        <receiver
+            android:name=".maps.GeofenceBroadcastReceiver"
+            android:exported="false" />
+
         <service
             android:name=".firebase.MessagingService"
             android:exported="false">
